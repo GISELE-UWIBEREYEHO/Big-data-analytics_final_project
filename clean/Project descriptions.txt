@@ -1,0 +1,166 @@
+Project descriptions 
+
+Both tables exist in HBase. list shows product_metrics and user_sessions, and describe 'user_sessions' shows the three column families I designed (cart, events, info), each keeping one version. This is a good screenshot for the schema section of your report. The exit is typed on the last line, so press Enter to leave the shell.
+
+then we connected our python to hbase using the following query 
+
+pip install happybase
+python -c "import happybase; c = happybase.Connection('localhost', 9090); print(c.tables())"
+
+after connecting we loaded our data in hbase 
+
+HBase is working, and this output is a good result for your report. Here’s what it shows:
+
+Newest first: the 2026-10-22 session is listed before the 2026-10-01 one. That’s the reverse-timestamp row key doing its job.
+Fast reads: the latest sessions for a user came back in 16 ms, because it’s a prefix scan on one user’s rows and not a table scan.
+Wide, sparse rows: each page view is its own cell (events:pv_001 to pv_009), and the cart has its own family. The two cart products, prod_00313 and prod_00369, also appear as product-detail views in that session, which is consistent with the data.
+
+User user_000000 shows only 2 sessions because you loaded 20K of the 100K sessions. Take a screenshot of this output.
+
+
+the output result 
+
+then after 
+
+That shows the daily views, cart adds and purchases for one product, which is the second HBase table.
+
+What comes next. HBase is done, apart from the screenshots and the report text. I’d now go in this order:
+
+MongoDB: the schema, the loader, and two aggregation pipelines (revenue by category, top products).
+Spark: run clean_normalize.py, then the batch analysis.
+
+MongoDB is quicker, so I’ll write it next. Start the container if it isn’t running yet:
+
+
+what spark does 
+
+
+These two commands are the Spark analysis part of your project, which is worth 30% of the grade. Here’s what each does and why.
+
+Where they fit. You already ran clean_normalize.py. It read the raw JSON and wrote tidy tables into the clean folder. These two scripts read those tables and answer business questions. --clean clean means “read the tables from the clean folder”, and --out results means “save the answers into a results folder”.
+
+Command 1: batch_analysis.py (the batch job). It runs a heavy computation over all 100K sessions and 25K transactions and produces three analyses:
+
+Co-purchase: which products are bought together in the same order (“users who bought X also bought Y”). It’s the basis of a recommendation feature.
+Co-view: which products are viewed together in the same session.
+Cohort analysis: users grouped by the month they registered, and how much each group spends in the following months.
+
+
+Spark is used because pairing every product with every other product in each basket is a very large join, and Spark spreads that work across your CPU cores.
+
+Command 2: spark_sql_analytics.py (the SQL queries). It runs six SQL queries over the same tables: top customers, revenue by device, the conversion funnel, top products per category, monthly growth, and a query joining “MongoDB-style” with “HBase-style” data. This shows the brief’s requirement to use Spark SQL for complex queries and to join data from different systems.
+
+What you get out of it:
+
+Printed tables for your screenshots in the report.
+CSV files in results\, which become the charts in Part 4.
+Concrete findings for the report, such as which categories earn the most, where shoppers drop out of the funnel, and which engagement level goes with higher spend.
+
+How it ties to the other parts:
+
+MongoDB: stores transactions and users. Its aggregation pipelines answer revenue and segment questions.
+HBase: stores time-ordered sessions for fast per-user lookup.
+Spark: processes everything at scale, joins across the data, and does the heavy analysis. That’s why the integrated query will combine all three.
+
+The set SPARK_HOME step you did earlier was needed only so Python could find your Spark installation.
+
+
+important query in spark 
+
+python batch_analysis.py --clean clean --out results
+python spark_sql_analytics.py --clean clean --out results 
+
+
+
+The formulate 
+
+
+These three commands set up MongoDB, the document database in your project, and then analyze data in it. You run them in order.
+
+1. pip install pymongo
+
+pymongo is the Python library that lets your scripts talk to MongoDB. You run this once. It’s a small download, so it should be quick even on your connection. If it says “Requirement already satisfied”, it’s already installed, which is fine.
+
+2. python load_mongo.py --data data
+
+This copies your generated data from the JSON files into the MongoDB container, which is already running in Docker. --data data tells it to read from your data folder. It builds five collections (MongoDB’s name for tables):
+
+Collection	What’s in it
+categories	25 categories, each with its subcategories inside
+products	5,000 products, each with its category name and price history inside
+users	10,000 users, each with a summary of their purchases (orders, total spent)
+transactions	25,000 orders, each with its line items inside
+sessions	20,000 browsing sessions, each with its page views inside
+
+The “inside” part is the point of a document database. Related data is stored together in one document, so reading an order gives you its items in one lookup, with no joins. This is the design you explain in the Part 1 section of your report. The script also creates indexes, which make later queries fast, and it’s safe to run twice because it rebuilds everything.
+
+3. python aggregations.py
+
+This runs five analyses inside MongoDB itself, using aggregation pipelines. A pipeline is a chain of steps, such as filter, group and sum, that MongoDB runs next to the data. The five are:
+
+Revenue by product category
+Top 10 products by revenue
+Users grouped by how often they buy (never, one-time, occasional, regular, loyal)
+Revenue per month
+Session conversion rate by traffic source
+
+Each result prints as a table, and also saves as a CSV file in a results folder. Those CSVs will become your charts. The brief asks for two pipelines, and you now have five.
+
+What you should see: the loader prints a line with a count for each collection, then “indexes created”. The pipelines script prints five small tables.
+
+What can go wrong:
+
+“Cannot reach MongoDB”: the container isn’t running. Run docker compose ps, and if auca-mongo isn’t listed as Up, run docker compose up -d mongodb.
+“File not found”: you’re in the wrong folder. Run cd /d "%USERPROFILE%\Desktop\Big data Analysis" first, and make sure load_mongo.py and aggregations.py are saved there.
+
+Run the three commands and paste the output, or the first error.
+
+
+
+Why the data has to be combined. Your data lives in different places, and each system holds only half of the story:
+
+System	What it holds	What it can’t tell you
+HBase	Every session’s browsing events: which pages, which device, which traffic source	Whether the visit ended in a real order
+MongoDB	The orders, with their totals and their session_id	How the shopper behaved before ordering
+
+The business question needs both: where do shoppers drop out between viewing a product and paying, and does that differ by device or traffic source? Neither database can answer it alone. HBase can’t see orders, and MongoDB can’t see the browsing journey.
+
+Why Spark is in the middle. HBase and MongoDB can’t join to each other. Spark reads a copy of the sessions from HBase and a copy of the orders from MongoDB, joins them on session_id, and counts the funnel stages in parallel. That’s the real-world pattern for this setup: operational databases hold the data, and a processing engine combines it.
+
+
+the Integration part 
+
+
+What the script does, step by step:
+
+Scans HBase and reduces each session to yes/no flags: viewed a product, reached the cart, reached checkout, reached the confirmation page.
+Pulls from MongoDB the orders that have a session.
+Joins them in Spark, so every session either has an order or doesn’t.
+Computes the funnel and conversion rates overall, by device and by referrer, plus revenue per session.
+Compares the browsing record with the order record to check the two systems agree.
+
+What you get for the report:
+
+A funnel, with the share of shoppers surviving each stage and where most drop out.
+Which device or traffic source converts best.
+The mismatch finding: sessions that reached the confirmation page with no order. It’s a good “critical thinking” point in your limitations section, because it shows the two systems don’t fully agree.
+CSVs in results, which feed the funnel chart in Part 4.
+
+What must be done first. Both databases need data in them:
+
+python load_hbase.py --data data for HBase.
+python load_mongo.py --data data for MongoDB.
+
+Both containers also need to be running (docker compose ps). If you run the script before those loads, it stops with a message saying which source is empty.
+
+
+
+
+
+
+
+
+
+
+
+

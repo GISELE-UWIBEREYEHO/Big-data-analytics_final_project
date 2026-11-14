@@ -1,0 +1,6 @@
+referrer,sessions,viewed_product,reached_cart,reached_checkout,purchased,revenue,view_to_cart_pct,cart_to_checkout_pct,checkout_to_purchase_pct,session_conversion_pct,revenue_per_session
+social,20121,19884,13642,8746,2463,1928041.51,68.6,64.1,28.2,12.2,95.82
+email,20057,19799,13545,8661,2397,1906706.13,68.4,63.9,27.7,12.0,95.06
+affiliate,20033,19771,13616,8800,2581,2078602.14,68.9,64.6,29.3,12.9,103.76
+search_engine,19904,19669,13570,8814,2590,1981294.78,69.0,65.0,29.4,13.0,99.54
+direct,19885,19627,13386,8622,2533,1920348.11,68.2,64.4,29.4,12.7,96.57

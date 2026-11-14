@@ -1,0 +1,26 @@
+category_name,units_sold,order_lines,category_id,revenue,avg_line_value
+Kelly-Santiago,4446,2236,cat_004,1139248.01,509.5
+Cameron-Parsons,3978,1961,cat_005,1066761.31,543.99
+"Anderson, Walls and Duncan",4088,2044,cat_014,1042455.31,510.01
+Mitchell-Kim,3857,1923,cat_021,1037235.96,539.38
+Hancock Inc,4253,2140,cat_017,1032713.24,482.58
+Phillips Inc,3997,2004,cat_018,1000163.44,499.08
+"Patterson, Smith and Jones",3791,1868,cat_024,995650.19,533.0
+Bush Inc,3950,1951,cat_003,988545.18,506.69
+"Ellis, Baker and Wright",3859,1919,cat_006,986151.55,513.89
+Carney-Santos,3950,1957,cat_012,980216.05,500.88
+Powell PLC,3894,1924,cat_019,965739.09,501.94
+Burns-Rodriguez,3812,1910,cat_010,964301.07,504.87
+Owens-Daniel,3740,1884,cat_015,949528.89,504.0
+"Brewer, Bryant and Hickman",4020,1986,cat_020,939628.62,473.13
+Spence PLC,3555,1761,cat_011,939280.72,533.38
+Baldwin Ltd,3988,1970,cat_001,936675.0,475.47
+Preston Ltd,3474,1750,cat_022,887367.49,507.07
+Skinner-Romero,3511,1749,cat_009,886598.4,506.92
+Rodriguez-Graham,3589,1812,cat_008,874104.95,482.4
+James LLC,3349,1694,cat_002,852082.77,503.0
+King-Odonnell,3493,1747,cat_023,846479.36,484.53
+"Moore, Becker and Carlson",3345,1710,cat_007,842317.2,492.58
+Wright-Leblanc,3239,1629,cat_016,828081.24,508.34
+Smith Ltd,3161,1598,cat_013,794719.76,497.32
+"Rodriguez, Figueroa and Sanchez",3070,1524,cat_000,777509.5,510.18

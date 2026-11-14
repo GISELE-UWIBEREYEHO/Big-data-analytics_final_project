@@ -1,0 +1,4 @@
+device_type,orders,revenue,avg_order_value,avg_discount
+tablet,4252,3287583.65,773.19,19.94
+mobile,4155,3279400.03,789.27,17.66
+desktop,4157,3248008.99,781.33,21.36

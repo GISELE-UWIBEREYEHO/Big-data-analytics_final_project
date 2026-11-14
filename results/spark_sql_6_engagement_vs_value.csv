@@ -1,0 +1,5 @@
+engagement_tier,users,avg_orders,avg_spend,buyer_pct
+1_low (<=5 sessions),666,1.43,1684.99,76.9
+2_medium (6-10),5171,1.98,2126.71,86.8
+3_high (11-15),3695,2.52,2556.23,93.3
+4_very_high (16+),468,3.09,2997.72,95.9

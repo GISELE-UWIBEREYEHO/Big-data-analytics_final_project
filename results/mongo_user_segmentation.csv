@@ -1,0 +1,6 @@
+users,segment,total_spend,avg_spend_per_user,avg_orders
+1104,1_never_purchased,0.0,0.0,0.0
+2452,2_one_time,2611140.65,1064.9,1.0
+4647,3_occasional_2_3,11797674.6,2538.77,2.42
+1726,4_regular_4_6,8002002.25,4636.15,4.47
+71,5_loyal_7_plus,556817.61,7842.5,7.39

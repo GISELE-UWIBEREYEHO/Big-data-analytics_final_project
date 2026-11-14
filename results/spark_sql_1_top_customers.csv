@@ -1,0 +1,16 @@
+user_id,city,state,orders,total_spent,sessions,avg_session_s,orders_per_100_sessions
+user_007368,Arnoldborough,TN,8,15393.63,14,1707.0,57.1
+user_004921,Tapiachester,WI,9,14706.58,10,1788.0,90.0
+user_007360,West Michele,MP,7,12454.03,17,1671.0,41.2
+user_009189,West Raven,PW,7,11176.87,12,1620.0,58.3
+user_006636,North Joshua,NE,10,10775.76,12,2163.0,83.3
+user_005142,Sharihaven,MO,7,10704.73,12,1571.0,58.3
+user_005481,Brownberg,IN,7,10271.04,8,1136.0,87.5
+user_008799,Michaelport,OK,6,10269.54,9,1723.0,66.7
+user_009161,New Gabriel,NV,6,10247.2,9,1941.0,66.7
+user_002941,Port Audrey,LA,9,10138.52,15,1895.0,60.0
+user_008049,Kimberlyview,GA,7,10027.47,12,1438.0,58.3
+user_000402,Port Molly,MH,5,10003.96,16,1617.0,31.3
+user_000146,New Manuel,OH,7,9888.48,12,1584.0,58.3
+user_003897,South Susanland,DC,7,9884.91,11,1803.0,63.6
+user_007764,Tateport,MP,7,9719.22,11,1944.0,63.6
