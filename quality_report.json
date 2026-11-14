@@ -1,0 +1,46 @@
+{
+  "categories": {
+    "raw": 25,
+    "clean": 25
+  },
+  "subcategories": {
+    "raw": 109,
+    "clean": 109
+  },
+  "users": {
+    "raw": 10000,
+    "clean": 10000
+  },
+  "products": {
+    "raw": 5000,
+    "clean": 5000
+  },
+  "sessions": {
+    "raw": 100000,
+    "clean": 100000
+  },
+  "page_views": {
+    "raw": 998672,
+    "clean": 998672
+  },
+  "cart_items": {
+    "raw": 104160,
+    "clean": 104160
+  },
+  "transactions": {
+    "raw": 25000,
+    "clean": 25000
+  },
+  "transaction_items": {
+    "raw": 55390,
+    "clean": 55390
+  },
+  "integrity_checks": {
+    "sessions_with_unknown_user": 0,
+    "transactions_with_unknown_user": 0,
+    "transactions_with_session_id_not_found": 0,
+    "transactions_without_session": 12436,
+    "txn_items_with_unknown_product": 0,
+    "page_views_with_unknown_product": 0
+  }
+}
