@@ -1,0 +1,35 @@
+# docker-compose.yml  --  MongoDB + HBase for the AUCA e-commerce project
+#
+# Start :  docker compose up -d
+# Status:  docker compose ps
+# Logs  :  docker compose logs -f hbase
+# Stop  :  docker compose down        (data is kept in the named volumes)
+# Reset :  docker compose down -v     (deletes all stored data)
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: auca-mongo
+    ports:
+      - "27017:27017"          # pymongo / MongoDB Compass connect here
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+  hbase:
+    # Community standalone image (HBase 2.4.17 + ZooKeeper + Thrift in one container).
+    # Apache does not publish an official HBase image.
+    image: ponponon/hbase:2.4.17
+    container_name: auca-hbase
+    ports:
+      - "9090:9090"            # Thrift API  -> happybase connects here
+      - "9095:9095"            # Thrift web UI
+      - "16010:16010"          # HBase Master web UI  (http://localhost:16010)
+      - "2181:2181"            # ZooKeeper
+    volumes:
+      - hbase_data:/data
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
+  hbase_data:
